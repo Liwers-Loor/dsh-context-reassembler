@@ -39,3 +39,25 @@
 | 合并 | Combine |
 | 拆分 | Deconst |
 | 重组 | Regroup |
+
+## 补充细则
+
+以下细则经 2026-08-16 与仓库维护者确认，与规则清单 1–11 同等效力。
+
+12. 组件名、功能名在项目内全局唯一；若出现同名，视为存在可合并之处，优先评估合并而非另立新名。
+
+13. Draft PR 采用逐级合入：功能分支的 Draft PR 以所属组件分支为 base，组件分支以所属模块分支为 base，模块分支以 main 为 base；评审仅针对本级 diff。
+
+14. 回滚点使用 git tag 实现：阶段任务完成时在当前开发分支打 tag，命名为 `rollback/<Branch-Name>/<年月日时分>`，如 `rollback/ContextAssembler/CoreParser/2026-08-16-1430`；回滚时从该 tag 检出另开修复分支。
+
+15. 工作日志存放于仓库根目录 `logs/` 下，文件按 `YYYY-MM-DD.md` 命名（如 `2026-08-16.md`）；增量撰写完成后直接在 main 分支提交并 push，与开发分支、PR、回滚点完全隔离；日志提交的 commit message 统一为 `docs(logs): <年月日时分>`。
+
+16. 一次开发任务涉及多个操作时，分支命名允许叠加操作词，按主次顺序排列，如 `<Module-Name>/<Component-Name>_Repair_Upgrade`；合并、拆分、重组适用于全部层级，模块级合并命名为 `sub/<Module-Name1>_<Module-Name2>_Combine`。
+
+17. PR 合入后删除源开发分支，保持远端分支列表干净；可回溯性由第 14 条的回滚 tag 保证。
+
+18. 代码提交信息采用 Conventional Commits 格式：`<type>: <说明>`，type 取 feat / fix / refactor / docs / chore 等（日志提交按第 15 条执行）。
+
+19. 已提交的工作日志出现错误时，不修改原条目，另追加一条增量并标注「勘误」，说明勘误对象与更正内容。
+
+20. 模块、组件、功能的名称内部采用驼峰连写、单词首字母大写、词间不使用分隔符（如 `ConfigLoader`），保证分支名中的下划线仅承担内容分隔与操作词分隔的职责。
